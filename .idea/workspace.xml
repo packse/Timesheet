@@ -35,4 +35,14 @@
     </task>
     <servers />
   </component>
+  <component name="WindowStateProjectService">
+    <state x="403" y="151" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1598443173205">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="403" y="151" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1280.680@0.0.1280.680" timestamp="1598443173205" />
+    <state x="349" y="169" key="com.intellij.ide.util.TipDialog" timestamp="1598443055082">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="349" y="169" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1598443055082" />
+  </component>
 </project>
