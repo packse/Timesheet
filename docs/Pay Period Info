@@ -1,0 +1,10 @@
+# Information strictly related to dealing with the pay period #
+
+- Pay Period start is set by user and the next fortnight from the start date is assigned as the end date automatically
+- Needs to be some way to either save current pay period data so that if a change is made data is not erased.
+- In all cases a fortnight's worth of data will need to be saved to the program somehow so that the data can be entered
+in daily
+Possibilities include:
+    - Either manual or auto save the data that is written. This would however impact on memory availability
+    - Ask for confirmation before changing start pay period so that the data isn't removed. Only would need to save
+    current fortnight's worth of data

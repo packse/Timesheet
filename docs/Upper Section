@@ -1,0 +1,8 @@
+# This includes all of the data that will mostly remain constant for each employee. For example the employee name and
+classification as it won't need to change often if at all #
+
+- Employee name will be a text field entered and after saving will be stored to increase speed of entering data
+- Classification will work identical to employee name
+
+- Both will be placed at the top underneath the the heading elements and will be separate from the elements below it
+such as time related elements like pay period and time sheet entering.

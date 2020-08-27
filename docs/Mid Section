@@ -1,0 +1,8 @@
+# Elements related to the pay period and entering times on the time sheet that will be the primary location users will
+frequent most often #
+
+- Dates will be automatically entered based on pay period to reduce the requirement for users to enter it
+- On public holiday's a check box would be simplest to denote it being the case. This could similarly be the case for
+sick leave hrs/annual leave hrs/leave without pay hrs
+- Training hours are added on top of the normal hours so they would have their own separate field
+    - Possible that the field would be hidden unless the user selects it
