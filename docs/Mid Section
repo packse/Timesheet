@@ -1,8 +1,55 @@
-# Elements related to the pay period and entering times on the time sheet that will be the primary location users will
-frequent most often #
+### Elements related to the pay period and entering times on the time sheet that will be the primary location users will
+frequent most often ###
 
 - Dates will be automatically entered based on pay period to reduce the requirement for users to enter it
-- On public holiday's a check box would be simplest to denote it being the case. This could similarly be the case for
-sick leave hrs/annual leave hrs/leave without pay hrs
-- Training hours are added on top of the normal hours so they would have their own separate field
-    - Possible that the field would be hidden unless the user selects it
+
+
+## Different sections ##
+- Depending on what type of work was performed and at what time there is a requirement that sections are created to
+separate them. These include:
+    - The usual Mon-Fri/Weekend jobs
+    - Public holiday hours
+    - Sick leave hours + Certificate's
+    - Annual leave + Leave without pay
+    - Training hrs
+
+
+#  Mon-Fri/Weekend Jobs #
+- This refers to jobs that are completed within normal times without additional modifiers such as public holidays and
+training hrs
+- For these jobs the start, finish time and breaks is all that needs to be entered and it will automatically calculate
+if it is a weekend, and how much time elapsed from start to finish - breaks.
+- E.g If it started from 7 to 3 then 7 hours have elapsed. Minus a break of 30 mins the total would be calculated as
+7.5 hours
+
+
+# Public Holidays #
+- Public holidays are calculated by determining which day was the public holiday and transferring the hrs from that day
+ to public holiday hours.
+        - E.g. If the public holiday was during Mon-Fri hours at 7 hrs total we would simply make Mon-Fri hrs 0 and
+        transfer that amount to public holiday hours.
+- The reason this is complex is because public holiday hours may start on the Friday but end on the Saturday if done
+during night shift which needs to be accounted for in calculations.
+
+
+# Sick Leave + Certificate handling #
+- On days where the user doesn't enter for work the hours of sick leave need to be entered. If a certificate is attained
+this also needs to be confirmed as a yes/no query
+- In regards to sick leave hours it can be expected that the user is not available for the entire day and so will not
+be considered for annual leave or leave without pay
+- Additionally the start/finish time is not entered. Instead just the hours that would have been spent at work normally
+is written in (usually 8 hours)
+
+
+# Annual Leave hrs/Leave without pay hrs #
+- This includes time spent away from work but making use of annual leave.
+- Similar to sick leave only the hours that would normally be spent at work needs to be entered (usually 8 hours)
+- While annual leave and leave without pay are technically separate the user would only need to enter within annual
+leave and the company would determine if they still have hours left that they could be compensated for.
+    - As a result only a single field for annual leave hours is required as leave without pay column is rarely used
+
+
+# Training Hours #
+- Training hours are added on top of the normal hours, separate from the calculation performed using start/finish time
+and so only need an additional field and no interaction with other fields
+- They are however only occur monday to friday
