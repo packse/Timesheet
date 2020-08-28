@@ -6,3 +6,5 @@ classification as it won't need to change often if at all #
 
 - Both will be placed at the top underneath the the heading elements and will be separate from the elements below it
 such as time related elements like pay period and time sheet entering.
+
+- Need to have some kind of error show up at the top if any of the fields entered into are invalid

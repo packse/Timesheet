@@ -1,8 +1,8 @@
 Definite In Scope:
 - Fill in Employee Name
 - Fill in Classification
-- Fill in pay period Start to End dates
-- Filling in Mon/Fri and Weekends within the same field and only displaying them separate in the printed version
+- Fill in pay period Start date, auto fill end date
+- Filling in Mon/Fri and Weekends in the same field and displaying them separate in the printed version to match format
 - Remember prior timetable data when going to the next pay period
 - Translate the data from the program into a format similar to the example printed version for easy sending and printing
 - Sum and Count performed on the number of Mon-Fri shifts, number of weekend shifts and total shifts
