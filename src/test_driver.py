@@ -1,10 +1,12 @@
 from src import Employee as e
 import PyQt5.QtWidgets as qt
+from PyQt5.QtCore import QSettings
+from src import UpperLayout as u
 
 # Displays the label with text 'Name' and allows the user to enter into the text box
 def practice_code():
     # Test Data
-    emp1 = e.Employee("John", "SD")
+    emp1 = e.Employee("John", "Nurse")
     # Qapplication required in every qt app. If we had any parameters we would put them in the array
     app = qt.QApplication([])
     # There are a number of different styles that change how the widgets look
@@ -57,18 +59,12 @@ def upper_area():
     app = qt.QApplication([])
     app.setStyle('Fusion')
     window = qt.QWidget()
-    layout = qt.QHBoxLayout()
-    name_label = qt.QLabel('Name:')
-    name_input = qt.QLineEdit()
-    name_input.setMaxLength(50)
-    classification_label = qt.QLabel('Classification:')
-    classification_input = qt.QLineEdit()
-    classification_input.setMaxLength(30)
-    layout.addWidget(name_label)
-    layout.addWidget(name_input)
-    layout.addWidget(classification_label)
-    layout.addWidget(classification_input)
+    settings = QSettings('Noone', 'TimeSheet')
+    app.setApplicationName("TimeSheet")
+    layout = u.UpperLayout()
+
     window.setLayout(layout)
+
     window.show()
     app.exec_()
 
