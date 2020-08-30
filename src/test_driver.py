@@ -1,7 +1,7 @@
-from src import Employee as e
+from src import employee as e
 import PyQt5.QtWidgets as qt
-from PyQt5.QtCore import QSettings
-from src import UpperLayout as u
+from src import layouts as l
+from src import savebutton as s
 
 # Displays the label with text 'Name' and allows the user to enter into the text box
 def practice_code():
@@ -23,6 +23,10 @@ def practice_code():
     name_input.setText(emp1.name)
     # We place our created widgets inside the layout so it can organise how to display it
     layout.addWidget(label)
+    # Adding stretch adds an empty box used to separate our widgets and layouts or to push them closer together.
+    # It is important to add addStretch() in the right location in code to make it work properly. Think of it like
+    # how you would add spacing
+    layout.addStretch(0)
     layout.addWidget(name_input)
     # We then set which layout is within that window
     window.setLayout(layout)
@@ -45,6 +49,7 @@ def practice_code2():
     window.setLayout(layout)
     window.show()
 
+
     # The actual function that runs when text has been entered in the input box
     def on_text_entered():
         display.setText(enter.text())
@@ -59,12 +64,15 @@ def upper_area():
     app = qt.QApplication([])
     app.setStyle('Fusion')
     window = qt.QWidget()
-    settings = QSettings('Noone', 'TimeSheet')
     app.setApplicationName("TimeSheet")
-    layout = u.UpperLayout()
-
-    window.setLayout(layout)
-
+    vertical_layout_container = qt.QVBoxLayout()
+    upper_layout = l.UpperLayout()
+    vertical_layout_container.addLayout(l.HeadingLayout())
+    vertical_layout_container.addLayout(l.StatusLayout())
+    vertical_layout_container.addLayout(upper_layout)
+    frame = qt.QFrame()
+    window.setLayout(vertical_layout_container)
+    upper_layout.addWidget(s.SaveButton(vertical_layout_container))
     window.show()
     app.exec_()
 
