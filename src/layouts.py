@@ -10,6 +10,7 @@ class HeadingLayout(QHBoxLayout):
         heading_label = QLabel("Timesheet Program")
         heading_label.setAlignment(Qt.AlignCenter)
         self.addWidget(heading_label)
+        self.setObjectName("HeadingLayout")
 
 
 class StatusLayout(QVBoxLayout):
@@ -23,7 +24,8 @@ class StatusLayout(QVBoxLayout):
 
         self.addWidget(head_labl)
         self.addWidget(body_label)
-        self.setEnabled(False)
+        self.setObjectName("StatusLayout")
+
 
 class UpperLayout(QHBoxLayout):
     def __init__(self):
@@ -39,5 +41,8 @@ class UpperLayout(QHBoxLayout):
         self.addWidget(self.name_input)
         self.addWidget(self.classification_label)
         self.addWidget(self.classification_input)
+
+        self.setObjectName("UpperLayout")
+
 
 

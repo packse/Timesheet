@@ -27,6 +27,8 @@ def practice_code():
     # It is important to add addStretch() in the right location in code to make it work properly. Think of it like
     # how you would add spacing
     layout.addStretch(0)
+    # This adds margins around the layout to provide it with additional space
+    layout.setContentsMargins(0,0,0,0)
     layout.addWidget(name_input)
     # We then set which layout is within that window
     window.setLayout(layout)
@@ -60,23 +62,66 @@ def practice_code2():
 
     app.exec_()
 
-def upper_area():
+def test_zone():
     app = qt.QApplication([])
     app.setStyle('Fusion')
-    window = qt.QWidget()
     app.setApplicationName("TimeSheet")
+    main_window = qt.QWidget()
     vertical_layout_container = qt.QVBoxLayout()
+    main_window.setLayout(vertical_layout_container)
+
     upper_layout = l.UpperLayout()
-    vertical_layout_container.addLayout(l.HeadingLayout())
-    vertical_layout_container.addLayout(l.StatusLayout())
-    vertical_layout_container.addLayout(upper_layout)
-    frame = qt.QFrame()
-    window.setLayout(vertical_layout_container)
+
+    # These should end up having their own distinct classes added to them once required especially to set object name
+    heading_frame = qt.QFrame(objectName="HeadingFrame")
+    status_frame = qt.QFrame(objectName="StatusFrame")
+    upper_frame = qt.QFrame(objectName="UpperFrame")
+
+
+    heading_frame.setLayout(l.HeadingLayout())
+    status_frame.setLayout(l.StatusLayout())
+    upper_frame.setLayout(upper_layout)
+
+    vertical_layout_container.addWidget(heading_frame)
+    vertical_layout_container.addWidget(status_frame)
+    vertical_layout_container.addWidget(upper_frame)
+
+
     upper_layout.addWidget(s.SaveButton(vertical_layout_container))
-    window.show()
+
+
+    main_window.show()
     app.exec_()
+
+def test_zone2():
+    app = qt.QApplication([])
+    app.setStyle('Fusion')
+    app.setApplicationName("TimeSheet")
+    main_window = qt.QWidget()
+    vertical_layout_container = qt.QVBoxLayout()
+    main_window.setLayout(vertical_layout_container)
+    head_window = qt.QWidget()
+    head_layout = l.HeadingLayout()
+    head_window.setLayout(head_layout)
+    vertical_layout_container.addWidget(head_window)
+    status_window = qt.QWidget()
+    status_layout = l.StatusLayout()
+    status_window.setLayout(status_layout)
+    vertical_layout_container.addWidget(status_window)
+
+
+
+
+
+    main_window.show()
+    app.exec_()
+
+
+
+
+
 
 if __name__ == '__main__':
 
-    upper_area()
+    test_zone()
 

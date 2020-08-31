@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QPushButton
 from src import employee as e
 from PyQt5.QtCore import QSettings
 from src import layouts as l
@@ -10,8 +10,15 @@ class SaveButton(QPushButton):
         super().__init__()
         self.setText('Save')
         settings = QSettings('Noone', 'TimeSheet')
-        # Get the upper layout by using the name of the class and returning it
-        upper_layout = [item for item in layout_container.children() if item.__class__.__name__ == "UpperLayout"][0]
+        upper_frame = None
+        for i in range(layout_container.count()):
+            if layout_container.itemAt(i).widget().objectName() == "UpperFrame":
+                upper_frame = layout_container.itemAt(i).widget()
+
+        # Get the upper layout by using the name of the class and returning it. Find children returns list so get the
+        # single element by using pop
+        upper_layout = upper_frame.findChildren(l.UpperLayout, "UpperLayout").pop()
+
         def save_button_clicked():
             name_text = upper_layout.name_input.text()
             class_text = upper_layout.classification_input.text()
