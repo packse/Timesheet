@@ -16,14 +16,14 @@ class HeadingLayout(QHBoxLayout):
 class StatusLayout(QVBoxLayout):
     def __init__(self):
         super().__init__()
-        # Could just have a single label but it would require that everything is left aligned
-        head_labl = QLabel("Error:")
-        head_labl.setAlignment(Qt.AlignCenter)
 
-        body_label = QLabel("-THIS IS THE ERROR\n-HERE IS ANOTHER ERROR")
+        self.head_label = QLabel()
+        self.head_label.setAlignment(Qt.AlignCenter)
 
-        self.addWidget(head_labl)
-        self.addWidget(body_label)
+        self.body_label = QLabel()
+
+        self.addWidget(self.head_label)
+        self.addWidget(self.body_label)
         self.setObjectName("StatusLayout")
 
 

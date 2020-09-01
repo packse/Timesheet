@@ -2,6 +2,7 @@ from src import employee as e
 import PyQt5.QtWidgets as qt
 from src import layouts as l
 from src import savebutton as s
+from src import frames as f
 
 # Displays the label with text 'Name' and allows the user to enter into the text box
 def practice_code():
@@ -72,21 +73,13 @@ def test_zone():
 
     upper_layout = l.UpperLayout()
 
-    # These should end up having their own distinct classes added to them once required especially to set object name
-    heading_frame = qt.QFrame(objectName="HeadingFrame")
-    status_frame = qt.QFrame(objectName="StatusFrame")
-    upper_frame = qt.QFrame(objectName="UpperFrame")
-
-
-    heading_frame.setLayout(l.HeadingLayout())
-    status_frame.setLayout(l.StatusLayout())
-    upper_frame.setLayout(upper_layout)
+    heading_frame = f.HeadingFrame(l.HeadingLayout())
+    status_frame = f.StatusFrame(l.StatusLayout())
+    upper_frame = f.UpperFrame(upper_layout)
 
     vertical_layout_container.addWidget(heading_frame)
     vertical_layout_container.addWidget(status_frame)
     vertical_layout_container.addWidget(upper_frame)
-
-
     upper_layout.addWidget(s.SaveButton(vertical_layout_container))
 
 
