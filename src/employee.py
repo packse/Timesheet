@@ -1,3 +1,4 @@
+# Employee class primarily for validating entered text input data for saving
 class Employee:
 
     def __init__(self, name, classification):

@@ -71,20 +71,21 @@ def test_zone():
     vertical_layout_container = qt.QVBoxLayout()
     main_window.setLayout(vertical_layout_container)
 
-    upper_layout = l.UpperLayout()
+    details_layout = l.DetailsLayout()
 
     heading_frame = f.HeadingFrame(l.HeadingLayout())
     status_frame = f.StatusFrame(l.StatusLayout())
-    upper_frame = f.UpperFrame(upper_layout)
+    details_frame = f.DetailsFrame(details_layout)
 
     vertical_layout_container.addWidget(heading_frame)
     vertical_layout_container.addWidget(status_frame)
-    vertical_layout_container.addWidget(upper_frame)
-    upper_layout.addWidget(s.SaveButton(vertical_layout_container))
+    vertical_layout_container.addWidget(details_frame)
+    details_layout.addWidget(s.SaveButton(vertical_layout_container))
 
 
     main_window.show()
     app.exec_()
+
 
 def test_zone2():
     app = qt.QApplication([])
@@ -102,12 +103,9 @@ def test_zone2():
     status_window.setLayout(status_layout)
     vertical_layout_container.addWidget(status_window)
 
-
-
-
-
     main_window.show()
     app.exec_()
+
 
 
 

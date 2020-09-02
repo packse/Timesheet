@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QFrame
 
+
 # All frames are given their layouts as parameters on creation
+# QFrames operate identical to normal QWidgets with the added capability to add borders
 class HeadingFrame(QFrame):
     def __init__(self, layout):
         super().__init__()
@@ -17,8 +19,8 @@ class StatusFrame(QFrame):
         self.hide()
 
 
-class UpperFrame(QFrame):
+class DetailsFrame(QFrame):
     def __init__(self, layout):
         super().__init__()
-        self.setObjectName("UpperFrame")
+        self.setObjectName("DetailsFrame")
         self.setLayout(layout)
