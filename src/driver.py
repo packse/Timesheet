@@ -19,10 +19,12 @@ class MainWindow(QWidget):
         heading_frame = f.HeadingFrame(l.HeadingLayout())
         status_frame = f.StatusFrame(l.StatusLayout())
         details_frame = f.DetailsFrame(details_layout)
+        time_period_frame = f.TimePeriodFrame(l.TimePeriodLayout())
 
         vertical_layout_container.addWidget(heading_frame)
         vertical_layout_container.addWidget(status_frame)
         vertical_layout_container.addWidget(details_frame)
+        vertical_layout_container.addWidget(time_period_frame)
 
         # Must be placed at the end once all other layouts have been initialised
         details_layout.addWidget(s.SaveButton(vertical_layout_container))

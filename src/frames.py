@@ -24,3 +24,10 @@ class DetailsFrame(QFrame):
         super().__init__()
         self.setObjectName("DetailsFrame")
         self.setLayout(layout)
+
+
+class TimePeriodFrame(QFrame):
+    def __init__(self, layout):
+        super().__init__()
+        self.setObjectName("TimePeriodFrame")
+        self.setLayout(layout)
