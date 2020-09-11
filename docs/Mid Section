@@ -35,7 +35,7 @@ during night shift which needs to be accounted for in calculations.
 # Sick Leave + Certificate handling #
 - On days where the user doesn't enter for work the hours of sick leave need to be entered. If a certificate is attained
 this also needs to be confirmed as a yes/no query
-- In regards to sick leave hours it can be expected that the user is not available for the entire day and so will not
+- In regards to sick leave hours it can be expected that the employee is not available for the entire day and so will not
 be considered for annual leave or leave without pay
 - Additionally the start/finish time is not entered. Instead just the hours that would have been spent at work normally
 is written in (usually 8 hours)
@@ -52,4 +52,5 @@ leave and the company would determine if they still have hours left that they co
 # Training Hours #
 - Training hours are added on top of the normal hours, separate from the calculation performed using start/finish time
 and so only need an additional field and no interaction with other fields
-- They are however only occur monday to friday
+- They however only occur monday to friday
+- Can assume a worker only comes in for training and not for work

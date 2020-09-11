@@ -27,6 +27,7 @@ class StatusLayout(QVBoxLayout):
         self.addWidget(self.head_label)
         self.addWidget(self.body_label)
 
+
 # The section for users to enter their name and classification
 class DetailsLayout(QHBoxLayout):
     def __init__(self):
@@ -50,20 +51,20 @@ class DetailsLayout(QHBoxLayout):
 
 # Section to enter the start date of the fortnight
 class TimePeriodLayout(QHBoxLayout):
+
+
     def __init__(self):
         super().__init__()
         self.setObjectName("TimePeriodLayout")
-
+        settings = QSettings('Noone', 'TimeSheet')
         self.start_label = QLabel("Start Date")
-        self.start_date = QDateEdit()
+        self.start_date = QDateEdit(self.converted_date(settings.value('Start date')))
         self.start_date.setCalendarPopup(True)
-        # Can choose a start date from a fortnight (-14) before current date
-        self.start_date.setMinimumDate(QDate().currentDate().addDays(-14))
         self.start_date.setMaximumDate(QDate().currentDate())
         self.end_label = QLabel("End Date")
         self.end_date = QDateEdit()
         self.end_date.setDate(self.start_date.date().addDays(14))
-        # (2) removes the arrow from the QDate edit
+        # (2) removes the arrows from the QDate edit
         self.end_date.setButtonSymbols(2)
         self.end_date.setReadOnly(True)
 
@@ -78,3 +79,18 @@ class TimePeriodLayout(QHBoxLayout):
             self.end_date.setDate(new_date.addDays(14))
 
         self.start_date.dateChanged.connect(set_end_date)
+
+    # Converts a string date and returns it back as a a QDate Object
+    @staticmethod
+    def converted_date(str_date):
+        date = QDate()
+        # If a date exists in QSettings to use then set that date to start date
+        if str_date is not None:
+            str_list = str_date.split('/')
+            date.setDate(int(str_list[2]), int(str_list[1]), int(str_list[0]))
+        # Otherwise just set it to year 2020
+        else:
+            date.setDate(2020, 1, 1)
+
+        return date
+

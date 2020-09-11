@@ -18,18 +18,22 @@ class SaveButton(QPushButton):
         # We get object name by creating a dummy frame object in order to return the name
         details_frame = get_frame(layout_container, f.DetailsFrame(QVBoxLayout()).objectName())
         status_frame = get_frame(layout_container, f.StatusFrame(QVBoxLayout()).objectName())
+        time_frame = get_frame(layout_container, f.TimePeriodFrame(QVBoxLayout()).objectName())
 
         # Get the upper and status layout by using the objectName of the class and returning it.
         # Find children returns a list so to get the single element we use pop()
         details_layout = details_frame.findChildren(l.DetailsLayout, l.DetailsLayout().objectName()).pop()
         status_layout = status_frame.findChildren(l.StatusLayout, l.StatusLayout().objectName()).pop()
+        time_layout = time_frame.findChildren(l.TimePeriodLayout, l.TimePeriodLayout().objectName()).pop()
 
         # Saves the specified details when the button is clicked
         def save_button_clicked():
             status_frame.show()
+
             name_text = details_layout.name_input.text()
             class_text = details_layout.classification_input.text()
             temp = e.Employee(name_text, class_text)
+
             error_message = ""
 
             if temp.name == "":
@@ -40,6 +44,7 @@ class SaveButton(QPushButton):
             if error_message == "":
                 settings.setValue('Name text', temp.name)
                 settings.setValue('Classification text', temp.classification)
+                settings.setValue('Start date', time_layout.start_date.text())
                 status_layout.head_label.setText("Success!")
                 status_layout.body_label.setText("Save was successful")
             else:

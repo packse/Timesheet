@@ -87,21 +87,42 @@ def test_zone():
     app.exec_()
 
 
-def test_zone2():
+def scroll_area_practice():
     app = qt.QApplication([])
     app.setStyle('Fusion')
     app.setApplicationName("TimeSheet")
+
+
     main_window = qt.QWidget()
-    vertical_layout_container = qt.QVBoxLayout()
-    main_window.setLayout(vertical_layout_container)
-    head_window = qt.QWidget()
-    head_layout = l.HeadingLayout()
-    head_window.setLayout(head_layout)
-    vertical_layout_container.addWidget(head_window)
-    status_window = qt.QWidget()
-    status_layout = l.StatusLayout()
-    status_window.setLayout(status_layout)
-    vertical_layout_container.addWidget(status_window)
+    tab_widget = qt.QTabWidget()
+    scroll_widget = qt.QScrollArea()
+    scroll_widget2 = qt.QScrollArea()
+
+    # By putting the widget in the brackets you automatically set the widgets layout without having to call setLayout()
+    main_layout = qt.QVBoxLayout(main_window)
+    # Adds the tab widget to the main window widget. It will be added the same in our case except to vertical container
+    main_layout.addWidget(tab_widget)
+
+    # Creates a new tab page which will contain our scrollArea widget
+    tab_widget.addTab(scroll_widget, "TAB 1")
+    tab_widget.addTab(scroll_widget2, "TAB 2")
+
+    # Scroll area requires an inner content widget to hold data since it is technically only a container.
+    # Otherwise scrolling doesn't work properly
+    inner_widget = qt.QWidget()
+    inner_widget2 = qt.QWidget()
+    # Here we reduce by a line of code by setting which widget this layout belongs to
+    scroll_layout = qt.QVBoxLayout(inner_widget)
+    scroll_layout2 = qt.QVBoxLayout(inner_widget2)
+    test_label = qt.QLabel("WORDS AND LOTS OF EM FDHBHJDFBHDSBFJ")
+    test_label2 = qt.QLabel("A SECOND TAB OF WORDS AND LOTS OF EM")
+    scroll_layout.addWidget(test_label)
+    scroll_layout2.addWidget(test_label2)
+    # Important: setWidget can only be called after our inner content widget has been created and populated otherwise
+    # the data will not display. If necessary this can be fixed by using setWidgetResizable(True)
+    scroll_widget.setWidget(inner_widget)
+    scroll_widget2.setWidget(inner_widget2)
+
 
     main_window.show()
     app.exec_()
@@ -114,5 +135,5 @@ def test_zone2():
 
 if __name__ == '__main__':
 
-    test_zone()
+    scroll_area_practice()
 
