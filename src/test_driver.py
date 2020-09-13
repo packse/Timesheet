@@ -3,6 +3,7 @@ import PyQt5.QtWidgets as qt
 from src import layouts as l
 from src import savebutton as s
 from src import frames as f
+from src import pages as p
 
 # Displays the label with text 'Name' and allows the user to enter into the text box
 def practice_code():
@@ -86,6 +87,34 @@ def test_zone():
     main_window.show()
     app.exec_()
 
+def test_zone2():
+    app = qt.QApplication([])
+    app.setStyle('Fusion')
+    app.setApplicationName("TimeSheet")
+
+    main_window = qt.QWidget()
+    main_window_layout = qt.QHBoxLayout(main_window)
+
+    option_display = p.OptionWidget()
+    attending_display = p.AttendingPg()
+    sick_leave_display = p.SickDayPg()
+    annual_leave_display = p.AnnualLeavePg()
+    training_display = p.TrainingOnlyPg()
+
+    stacked_widget = qt.QStackedWidget()
+    stacked_widget.addWidget(attending_display)
+    stacked_widget.addWidget(sick_leave_display)
+    stacked_widget.addWidget(annual_leave_display)
+    stacked_widget.addWidget(training_display)
+
+    option_display.combo_box_widget.activated.connect(stacked_widget.setCurrentIndex)
+
+    main_window_layout.addWidget(option_display)
+    main_window_layout.addWidget(stacked_widget)
+
+    main_window.show()
+    app.exec_()
+
 
 def scroll_area_practice():
     app = qt.QApplication([])
@@ -128,6 +157,61 @@ def scroll_area_practice():
     app.exec_()
 
 
+def stacked_container_practice():
+    app = qt.QApplication([])
+    app.setStyle('Fusion')
+    app.setApplicationName("TimeSheet")
+
+
+    # Create the widgets
+    main_window = qt.QWidget()
+    stacked_widget = qt.QStackedWidget()
+    # First and second page widgets for the stacked layouts are created
+    first_page_widget = qt.QWidget()
+    second_page_widget = qt.QWidget()
+
+    # Shows the current index of the stacked widget that is being displayed
+    def show_index():
+        print(stacked_widget.currentIndex())
+
+    # Set the layouts of all of the widgets
+    main_window_layout = qt.QHBoxLayout(main_window)
+    first_page_layout = qt.QVBoxLayout(first_page_widget)
+    second_page_layout = qt.QVBoxLayout(second_page_widget)
+
+    # Creates the combobox. Each combobox has an index that can be retrieved starting from 0
+    page_combo_box = qt.QComboBox()
+    page_combo_box.addItem("PAGE1")
+    page_combo_box.addItem("PAGE2")
+
+    # I assume that activated holds the index of the option that was selected and then sends it to the stacked widget to
+    # set which index that will be displayed. Otherwise it just uses some kind of black magic
+    page_combo_box.activated.connect(stacked_widget.setCurrentIndex)
+    page_combo_box.activated.connect(show_index)
+
+    # Adds the test text to the page layouts
+    first_page_layout.addWidget(qt.QLabel("WORDS"))
+    first_page_layout.addWidget(qt.QLabel("AND"))
+    first_page_layout.addWidget(qt.QLabel("MORE"))
+    first_page_layout.addWidget(qt.QLabel("WORDS"))
+    second_page_layout.addWidget(qt.QLabel("LOTS"))
+    second_page_layout.addWidget(qt.QLabel("AND"))
+    second_page_layout.addWidget(qt.QLabel("LOTS"))
+
+    # Adds the page widgets to the stacked widget
+    stacked_widget.addWidget(first_page_widget)
+    stacked_widget.addWidget(second_page_widget)
+
+    # Adds the combo box and stacked layout to the main window
+    main_window_layout.addWidget(page_combo_box)
+    main_window_layout.addWidget(stacked_widget)
+    main_window_layout.addStretch()
+
+
+    main_window.show()
+    app.exec_()
+
+
 
 
 
@@ -135,5 +219,5 @@ def scroll_area_practice():
 
 if __name__ == '__main__':
 
-    scroll_area_practice()
+    test_zone2()
 
