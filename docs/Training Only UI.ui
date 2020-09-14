@@ -66,6 +66,16 @@
       </item>
       <item>
        <widget class="QDoubleSpinBox" name="doubleSpinBox">
+        <property name="baseSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">bb
+</string>
+        </property>
         <property name="singleStep">
          <double>0.500000000000000</double>
         </property>
