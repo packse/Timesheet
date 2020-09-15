@@ -87,30 +87,19 @@ def test_zone():
     main_window.show()
     app.exec_()
 
+
 def test_zone2():
     app = qt.QApplication([])
     app.setStyle('Fusion')
     app.setApplicationName("TimeSheet")
 
     main_window = qt.QWidget()
-    main_window_layout = qt.QHBoxLayout(main_window)
+    tab_window = p.TimeSlotContainer()
 
-    option_display = p.OptionWidget()
-    attending_display = p.AttendingPg()
-    sick_leave_display = p.SickDayPg()
-    annual_leave_display = p.AnnualLeavePg()
-    training_display = p.TrainingOnlyPg()
+    main_window_layout = qt.QVBoxLayout(main_window)
 
-    stacked_widget = qt.QStackedWidget()
-    stacked_widget.addWidget(attending_display)
-    stacked_widget.addWidget(sick_leave_display)
-    stacked_widget.addWidget(annual_leave_display)
-    stacked_widget.addWidget(training_display)
+    main_window_layout.addWidget(tab_window)
 
-    option_display.combo_box_widget.activated.connect(stacked_widget.setCurrentIndex)
-
-    main_window_layout.addWidget(option_display)
-    main_window_layout.addWidget(stacked_widget)
 
     main_window.show()
     app.exec_()

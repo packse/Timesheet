@@ -1,9 +1,73 @@
 # Contains the pages that will be within for the stacked layout
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QComboBox, QDoubleSpinBox, QCheckBox, QTimeEdit
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout, QLabel, QComboBox, QDoubleSpinBox, QCheckBox, \
+                                            QTimeEdit, QStackedWidget, QTabWidget, QScrollArea
 
 
-# Might need to consider using grid layout to layout it out properly. Could also try to use stretch or margins or size policy
+# Might need to consider using grid layout to lay it out properly. Could also try to use stretch or margins or size policy
+# Also consider what actually needs to be referred to as a class variable and not make everything self.
+
+# Contains two weeks worth of timeslots with a tab for the first and second week
+class TimeSlotContainer(QTabWidget):
+    def __init__(self):
+        super().__init__()
+        # For weeks 1 and 2 for a fortnight
+        self.scroll_area1 = QScrollArea()
+        self.scroll_window1 = QWidget()
+        self.scroll_window_layout1 = QVBoxLayout(self.scroll_window1)
+
+        self.scroll_area2 = QScrollArea()
+        self.scroll_window2 = QWidget()
+        self.scroll_window_layout2 = QVBoxLayout(self.scroll_window2)
+
+        # Test Data. This will need to be entered automatically
+        self.first_row1 = TimeSlotRow()
+        self.second_row1 = TimeSlotRow()
+
+        self.first_row2 = TimeSlotRow()
+
+        self.scroll_window_layout1.addWidget(self.first_row1)
+        self.scroll_window_layout1.addWidget(self.second_row1)
+
+        self.scroll_window_layout2.addWidget(self.first_row2)
+
+        self.addTab(self.scroll_area1, "Week 1")
+        self.addTab(self.scroll_area2, "Week 2")
+
+        # Need it to be resizable otherwise it doesn't resize when the screen size is increased
+        self.scroll_area1.setWidgetResizable(True)
+        self.scroll_area1.setWidget(self.scroll_window1)
+
+        self.scroll_area2.setWidgetResizable(True)
+        self.scroll_area2.setWidget(self.scroll_window2)
+
+
+
+# Holds the optionWidget and stackedLayout pages in a single frame
+class TimeSlotRow(QFrame):
+    def __init__(self):
+        super().__init__()
+        self.layout = QHBoxLayout(self)
+        self.setLineWidth(1)
+        # Sets the style of the lines drawn. Check online QFrame for more options
+        self.setFrameShape(QFrame.Plain | QFrame.Box)
+
+        self.option_display = OptionWidget()
+        self.attending_display = AttendingPg()
+        self.sick_leave_display = SickDayPg()
+        self.annual_leave_display = AnnualLeavePg()
+        self.training_display = TrainingOnlyPg()
+
+        self.stacked_widget = QStackedWidget()
+        self.stacked_widget.addWidget(self.attending_display)
+        self.stacked_widget.addWidget(self.sick_leave_display)
+        self.stacked_widget.addWidget(self.annual_leave_display)
+        self.stacked_widget.addWidget(self.training_display)
+
+        self.option_display.combo_box_widget.activated.connect(self.stacked_widget.setCurrentIndex)
+
+        self.layout.addWidget(self.option_display)
+        self.layout.addWidget(self.stacked_widget)
+
 
 # Widget that contains only the date and the options to select which page to show for the stacked layout
 class OptionWidget(QWidget):
@@ -41,6 +105,7 @@ class AttendingPg(QWidget):
         super().__init__()
         self.layout = QHBoxLayout(self)
 
+        # Creating the layouts #
         self.start_layout = QVBoxLayout()
         self.start_label = QLabel("Start Time:")
         self.start_input = QTimeEdit()
@@ -74,6 +139,7 @@ class AttendingPg(QWidget):
         self.info_normal_label = QLabel("Normal Day Hours: 0")
         self.info_holiday_label = QLabel("Public Holiday Hours: 0")
 
+        # Adding the Layouts #
 
         self.layout.addLayout(self.start_layout)
         self.start_layout.addWidget(self.start_label)
@@ -106,7 +172,6 @@ class AttendingPg(QWidget):
         self.info_layout.addStretch(1)
         self.info_layout.addWidget(self.info_normal_label)
         self.info_layout.addWidget(self.info_holiday_label)
-
 
 
 class SickDayPg(QWidget):
