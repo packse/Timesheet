@@ -1,15 +1,11 @@
 # Contains the pages that will be within for the stacked layout
 from PyQt5.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout, QLabel, QComboBox, QDoubleSpinBox, QCheckBox, \
                                             QTimeEdit, QStackedWidget, QTabWidget, QScrollArea
-from PyQt5.QtCore import QDate
-
-
-# Might need to consider using grid layout to lay it out properly. Could also try to use stretch or margins or size policy
-# Also consider what actually needs to be referred to as a class variable and not make everything self.
+from src import helper as h
 
 # Contains two weeks worth of timeslots with a tab for the first and second week
 class TimeSlotContainer(QTabWidget):
-    def __init__(self, date):
+    def __init__(self, date_edit):
         super().__init__()
         # For weeks 1 and 2 for a fortnight
         self.scroll_area1 = QScrollArea()
@@ -21,14 +17,25 @@ class TimeSlotContainer(QTabWidget):
         self.scroll_window_layout2 = QVBoxLayout(self.scroll_window2)
 
         timeslot_row_arr = []
+        num_days = 14
+        date = date_edit.date()
 
-        for i in range(14):
+        for i in range(num_days):
             current_row = TimeSlotRow(date.addDays(i))
-            if i < 7:
+            if i < num_days/2:
                 self.scroll_window_layout1.addWidget(current_row)
             else:
                 self.scroll_window_layout2.addWidget(current_row)
             timeslot_row_arr.append(current_row)
+
+        def start_date_changed():
+            new_date = date_edit.date()
+            if timeslot_row_arr is not None:
+                for ii in range(num_days):
+                    timeslot_row_arr[ii].option_display.start_date_label.setText\
+                        (h.format_qdate(new_date.addDays(ii)))
+
+        date_edit.dateChanged.connect(start_date_changed)
 
         self.addTab(self.scroll_area1, "Week 1")
         self.addTab(self.scroll_area2, "Week 2")
@@ -79,8 +86,7 @@ class OptionWidget(QWidget):
 
         self.start_date_headlabel = QLabel("Start Date:")
         # Right now this is a placeholder value but it will need to be sent in through the constructor
-        self.start_date_label = QLabel(self.format_qdate(date))
-
+        self.start_date_label = QLabel(h.format_qdate(date))
         self.combo_box_widget = QComboBox()
         self.combo_box_widget.addItem("Attending Work")
         self.combo_box_widget.addItem("Sick Day")
@@ -96,12 +102,7 @@ class OptionWidget(QWidget):
         self.layout.addLayout(self.start_date_layout)
         self.layout.addLayout(self.option_layout)
 
-        # Converts a QDate to a formatted string
-    @staticmethod
-    def format_qdate(date):
-        # Format would for example be Sunday 1/1/2020
-        return date.longDayName(date.dayOfWeek()) + " " + \
-               str(date.day()) + "/" + str(date.month()) + "/" + str(date.year())
+
 
 
 

@@ -20,7 +20,7 @@ class MainWindow(QWidget):
         status_frame = f.StatusFrame(l.StatusLayout())
         details_frame = f.DetailsFrame(details_layout)
         time_period_frame = f.TimePeriodFrame(l.TimePeriodLayout())
-        time_tab_frame = p.TimeSlotContainer(time_period_frame.layout().start_date.date())
+        time_tab_frame = p.TimeSlotContainer(time_period_frame.layout().start_date)
 
         vertical_layout_container.addWidget(heading_frame)
         vertical_layout_container.addWidget(status_frame)

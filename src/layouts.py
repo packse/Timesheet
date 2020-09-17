@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QDateEdit
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QSettings, QDate
+from src import helper as h
 
 
 # The top heading section of the application
@@ -52,13 +53,12 @@ class DetailsLayout(QHBoxLayout):
 # Section to enter the start date of the fortnight
 class TimePeriodLayout(QHBoxLayout):
 
-
     def __init__(self):
         super().__init__()
         self.setObjectName("TimePeriodLayout")
         settings = QSettings('Noone', 'TimeSheet')
         self.start_label = QLabel("Start Date")
-        self.start_date = QDateEdit(self.converted_date(settings.value('Start date')))
+        self.start_date = QDateEdit(h.converted_date(settings.value('Start date')))
         self.start_date.setCalendarPopup(True)
         self.start_date.setMaximumDate(QDate().currentDate())
         self.end_label = QLabel("End Date")
@@ -80,17 +80,5 @@ class TimePeriodLayout(QHBoxLayout):
 
         self.start_date.dateChanged.connect(set_end_date)
 
-    # Converts a string date and returns it back as a a QDate Object
-    @staticmethod
-    def converted_date(str_date):
-        date = QDate()
-        # If a date exists in QSettings to use then set that date to start date
-        if str_date is not None:
-            str_list = str_date.split('/')
-            date.setDate(int(str_list[2]), int(str_list[1]), int(str_list[0]))
-        # Otherwise just set it to year 2020
-        else:
-            date.setDate(2020, 1, 1)
 
-        return date
 

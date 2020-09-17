@@ -1,0 +1,8 @@
+Things that might need to be completed that could be useful
+
+# Everything #
+- Consider what actually needs to be referred to as a class variable and not make everything self.
+
+# TimeslotTab #
+- Will need to use stretch or margins or size policy the text look correct
+- Use an alternating colour scheme (White/Grey) to make it easier to see the different timeslots separately
