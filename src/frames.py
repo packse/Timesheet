@@ -31,3 +31,10 @@ class TimePeriodFrame(QFrame):
         super().__init__()
         self.setObjectName("TimePeriodFrame")
         self.setLayout(layout)
+
+
+class TimeTabFrame(QFrame):
+    def __init__(self, layout):
+        super().__init__()
+        self.setObjectName("TimeTabFrame")
+        self.setLayout(layout)

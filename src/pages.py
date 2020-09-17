@@ -1,6 +1,7 @@
 # Contains the pages that will be within for the stacked layout
 from PyQt5.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout, QLabel, QComboBox, QDoubleSpinBox, QCheckBox, \
                                             QTimeEdit, QStackedWidget, QTabWidget, QScrollArea
+from PyQt5.QtCore import QDate
 
 
 # Might need to consider using grid layout to lay it out properly. Could also try to use stretch or margins or size policy
@@ -8,7 +9,7 @@ from PyQt5.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout, QLabel, Q
 
 # Contains two weeks worth of timeslots with a tab for the first and second week
 class TimeSlotContainer(QTabWidget):
-    def __init__(self):
+    def __init__(self, date):
         super().__init__()
         # For weeks 1 and 2 for a fortnight
         self.scroll_area1 = QScrollArea()
@@ -19,16 +20,15 @@ class TimeSlotContainer(QTabWidget):
         self.scroll_window2 = QWidget()
         self.scroll_window_layout2 = QVBoxLayout(self.scroll_window2)
 
-        # Test Data. This will need to be entered automatically
-        self.first_row1 = TimeSlotRow()
-        self.second_row1 = TimeSlotRow()
+        timeslot_row_arr = []
 
-        self.first_row2 = TimeSlotRow()
-
-        self.scroll_window_layout1.addWidget(self.first_row1)
-        self.scroll_window_layout1.addWidget(self.second_row1)
-
-        self.scroll_window_layout2.addWidget(self.first_row2)
+        for i in range(14):
+            current_row = TimeSlotRow(date.addDays(i))
+            if i < 7:
+                self.scroll_window_layout1.addWidget(current_row)
+            else:
+                self.scroll_window_layout2.addWidget(current_row)
+            timeslot_row_arr.append(current_row)
 
         self.addTab(self.scroll_area1, "Week 1")
         self.addTab(self.scroll_area2, "Week 2")
@@ -41,17 +41,16 @@ class TimeSlotContainer(QTabWidget):
         self.scroll_area2.setWidget(self.scroll_window2)
 
 
-
 # Holds the optionWidget and stackedLayout pages in a single frame
 class TimeSlotRow(QFrame):
-    def __init__(self):
+    def __init__(self, date):
         super().__init__()
         self.layout = QHBoxLayout(self)
         self.setLineWidth(1)
         # Sets the style of the lines drawn. Check online QFrame for more options
         self.setFrameShape(QFrame.Plain | QFrame.Box)
 
-        self.option_display = OptionWidget()
+        self.option_display = OptionWidget(date)
         self.attending_display = AttendingPg()
         self.sick_leave_display = SickDayPg()
         self.annual_leave_display = AnnualLeavePg()
@@ -71,7 +70,7 @@ class TimeSlotRow(QFrame):
 
 # Widget that contains only the date and the options to select which page to show for the stacked layout
 class OptionWidget(QWidget):
-    def __init__(self):
+    def __init__(self, date):
         super().__init__()
         self.layout = QHBoxLayout(self)
         self.setLayout(self.layout)
@@ -80,7 +79,7 @@ class OptionWidget(QWidget):
 
         self.start_date_headlabel = QLabel("Start Date:")
         # Right now this is a placeholder value but it will need to be sent in through the constructor
-        self.start_date_label = QLabel("Friday 10/3/20")
+        self.start_date_label = QLabel(self.format_qdate(date))
 
         self.combo_box_widget = QComboBox()
         self.combo_box_widget.addItem("Attending Work")
@@ -96,6 +95,13 @@ class OptionWidget(QWidget):
 
         self.layout.addLayout(self.start_date_layout)
         self.layout.addLayout(self.option_layout)
+
+        # Converts a QDate to a formatted string
+    @staticmethod
+    def format_qdate(date):
+        # Format would for example be Sunday 1/1/2020
+        return date.longDayName(date.dayOfWeek()) + " " + \
+               str(date.day()) + "/" + str(date.month()) + "/" + str(date.year())
 
 
 
