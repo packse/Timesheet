@@ -1,7 +1,9 @@
 # Contains Helper Function #
 
+from PyQt5.QtCore import QDate, QTime
+from PyQt5.QtWidgets import QTimeEdit
+
 # Converts a QDate to a formatted string
-from PyQt5.QtCore import QDate
 def format_qdate(date):
     # Format would for example be Sunday 1/1/2020
     return date.longDayName(date.dayOfWeek()) + " " + \
@@ -20,3 +22,5 @@ def converted_date(str_date):
         date.setDate(2020, 1, 1)
 
     return date
+
+

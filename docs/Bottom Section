@@ -1,0 +1,7 @@
+### Contains elements relating to the total calculation of number of hours worked and the number of shifts ###
+
+- Totals hours and shifts should be calculated and then split for different sections including:
+    - Hours and number of shifts that take place during am time frame
+    - Hours and number of shifts that take place during pm time frame
+    - Hours and number of shifts that take place on a weekday (Monday-Friday)
+    - Hours and number of shifts that take place on a weekend (Saturday, Sunday)

@@ -2,6 +2,7 @@
 from PyQt5.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout, QLabel, QComboBox, QDoubleSpinBox, QCheckBox, \
                                             QTimeEdit, QStackedWidget, QTabWidget, QScrollArea
 from src import helper as h
+from PyQt5.QtCore import QTime
 
 # Contains two weeks worth of timeslots with a tab for the first and second week
 class TimeSlotContainer(QTabWidget):
@@ -62,12 +63,14 @@ class TimeSlotRow(QFrame):
         self.sick_leave_display = SickDayPg()
         self.annual_leave_display = AnnualLeavePg()
         self.training_display = TrainingOnlyPg()
+        self.not_working_display = NotWorkingPg()
 
         self.stacked_widget = QStackedWidget()
         self.stacked_widget.addWidget(self.attending_display)
         self.stacked_widget.addWidget(self.sick_leave_display)
         self.stacked_widget.addWidget(self.annual_leave_display)
         self.stacked_widget.addWidget(self.training_display)
+        self.stacked_widget.addWidget(self.not_working_display)
 
         self.option_display.combo_box_widget.activated.connect(self.stacked_widget.setCurrentIndex)
 
@@ -92,6 +95,7 @@ class OptionWidget(QWidget):
         self.combo_box_widget.addItem("Sick Day")
         self.combo_box_widget.addItem("Annual Leave")
         self.combo_box_widget.addItem("Training Only")
+        self.combo_box_widget.addItem("Not Working")
 
         self.option_layout.addWidget(self.combo_box_widget)
 
@@ -101,10 +105,6 @@ class OptionWidget(QWidget):
 
         self.layout.addLayout(self.start_date_layout)
         self.layout.addLayout(self.option_layout)
-
-
-
-
 
 
 class AttendingPg(QWidget):
@@ -143,8 +143,35 @@ class AttendingPg(QWidget):
         # Changed programmatically based on data entered in start and end inputs
         self.info_layout = QVBoxLayout()
         self.info_heading_label = QLabel("Hours Calculated:")
-        self.info_normal_label = QLabel("Normal Day Hours: 0")
-        self.info_holiday_label = QLabel("Public Holiday Hours: 0")
+        self.info_normal_label = QLabel("Normal Day Hours: " +
+                                        str(self.get_time_difference()))
+        # We won't save the status of the  public holidays checkbox so we can set it to 0
+        self.info_holiday_label = QLabel("Public Holiday Hours: 0.0")
+
+        # When either the start of finish time is changed by the user
+        def time_changed():
+            if self.start_input.time() > self.end_input.time():
+                self.holiday_checkbox_2.setEnabled(True)
+            else:
+                self.holiday_checkbox_2.setEnabled(False)
+                self.holiday_checkbox_2.setChecked(False)
+
+            difference = self.get_time_difference()
+            self.calculate_hrs(difference)
+
+
+        self.start_input.timeChanged.connect(time_changed)
+        self.end_input.timeChanged.connect(time_changed)
+        self.break_spinbox.valueChanged.connect(time_changed)
+
+        def checkbox_changed():
+            difference = self.get_time_difference()
+            self.calculate_hrs(difference)
+
+
+        self.holiday_checkbox_1.stateChanged.connect(checkbox_changed)
+        self.holiday_checkbox_2.stateChanged.connect(checkbox_changed)
+
 
         # Adding the Layouts #
 
@@ -179,6 +206,57 @@ class AttendingPg(QWidget):
         self.info_layout.addStretch(1)
         self.info_layout.addWidget(self.info_normal_label)
         self.info_layout.addWidget(self.info_holiday_label)
+
+
+    # Uses the start and end inputs and then returns the difference in hours between them
+    def get_time_difference(self):
+        start_time = self.start_input.time()
+        end_time = self.end_input.time()
+        difference = start_time.secsTo(end_time) / 60 / 60
+        # If difference is negative
+        if difference < 0:
+            # + because using - would cancel out the operation turning it to addition
+            difference = 24 + difference
+
+        return difference
+
+    def calculate_hrs(self, difference):
+
+        # Calculations from start time to midnight and midnight to end time
+        start_to_mid_hrs = QTime(0, 0).secsTo(self.end_input.time()) / 60 / 60
+        mid_to_end_hrs = 24 - (QTime(0, 0).secsTo(self.start_input.time()) / 60 / 60)
+        # Set difference to total hours - break time
+        difference -= self.break_spinbox.value()
+
+        # If both holiday checkbox 1 and 2 are checked or only checkbox 1 can be and is checked then display difference
+        # in public holiday hrs
+        if self.holiday_checkbox_1.isChecked() and (self.holiday_checkbox_2.isChecked() or
+                                                    not self.holiday_checkbox_2.isEnabled()):
+            self.info_normal_label.setText("Normal Day Hours: 0.0")
+            self.info_holiday_label.setText("Public Holiday Hours: " + str(difference))
+
+        # If neither checkbox 1 or 2 are checked then display the difference in normal hrs
+        elif not self.holiday_checkbox_1.isChecked() and not self.holiday_checkbox_2.isChecked():
+            self.info_normal_label.setText("Normal Day Hours: " + str(difference))
+            self.info_holiday_label.setText("Public Holiday Hours: 0.0")
+
+        # If checkbox 1 is checked and checkbox 2 can be checked but is not then take the hours from the first day
+        # for public holiday hrs and the remainder for normal hours
+        elif self.holiday_checkbox_1.isChecked() and (self.holiday_checkbox_2.isEnabled()
+                                                      and not self.holiday_checkbox_2.isChecked()):
+            start_to_mid_hrs -= self.break_spinbox.value()
+            self.info_normal_label.setText("Normal Day Hours: " + str(start_to_mid_hrs))
+            self.info_holiday_label.setText("Public Holiday Hours: " + str(mid_to_end_hrs))
+
+        # If checkbox 2 is checked but checkbox 1 isn't then take the hours from the second day for public holiday
+        # hrs and the rest for normal hours
+        elif self.holiday_checkbox_2.isChecked() and (self.holiday_checkbox_1.isEnabled()
+                                                      and not self.holiday_checkbox_1.isChecked()):
+            # break time reduces from normal day hours rather than holiday hours
+            mid_to_end_hrs -= self.break_spinbox.value()
+            self.info_normal_label.setText("Normal Day Hours: " + str(mid_to_end_hrs))
+            self.info_holiday_label.setText("Public Holiday Hours: " + str(start_to_mid_hrs))
+
 
 
 class SickDayPg(QWidget):
@@ -221,9 +299,6 @@ class AnnualLeavePg(QWidget):
         self.hrs_layout.addStretch(1)
         self.hrs_layout.addWidget(self.hrs_spinbox)
 
-
-
-
 class TrainingOnlyPg(QWidget):
     def __init__(self):
         super().__init__()
@@ -242,6 +317,7 @@ class TrainingOnlyPg(QWidget):
         self.hrs_layout.addWidget(self.hrs_spinbox)
 
 
-
-
-
+class NotWorkingPg(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.layout = QHBoxLayout(self)
