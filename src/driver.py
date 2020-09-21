@@ -21,12 +21,14 @@ class MainWindow(QWidget):
         details_frame = f.DetailsFrame(details_layout)
         time_period_frame = f.TimePeriodFrame(l.TimePeriodLayout())
         time_tab_frame = p.TimeSlotContainer(time_period_frame.layout().start_date)
+        totals_table_frame = f.TotalsTableFrame(l.TotalsTableLayout())
 
         vertical_layout_container.addWidget(heading_frame)
         vertical_layout_container.addWidget(status_frame)
         vertical_layout_container.addWidget(details_frame)
         vertical_layout_container.addWidget(time_period_frame)
         vertical_layout_container.addWidget(time_tab_frame)
+        vertical_layout_container.addWidget(totals_table_frame)
 
         # Must be placed at the end once all other layouts have been initialised
         details_layout.addWidget(s.SaveButton(vertical_layout_container))

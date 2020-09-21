@@ -4,6 +4,8 @@ from src import layouts as l
 from src import savebutton as s
 from src import frames as f
 from src import pages as p
+from src import tables as t
+import PyQt5.QtGui
 
 # Displays the label with text 'Name' and allows the user to enter into the text box
 def practice_code():
@@ -88,22 +90,54 @@ def test_zone():
     app.exec_()
 
 
+def grid_layout_practice():
+    app = qt.QApplication([])
+    app.setStyle('Fusion')
+    app.setApplicationName("TimeSheet")
+
+    main_window = qt.QWidget()
+    layout = qt.QGridLayout(main_window)
+
+    layout.addWidget(qt.QLabel("Number of Hours"), 1, 0)
+    layout.addWidget(qt.QLabel("Number of Shifts"), 2, 0)
+    layout.addWidget(qt.QLabel("AM Weekday"), 0, 1)
+    layout.addWidget(qt.QLabel("PM Weekday"), 0, 2)
+    layout.addWidget(qt.QLabel("AM Weekend"), 0, 3)
+    layout.addWidget(qt.QLabel("PM Weekend"), 0, 4)
+    layout.addWidget(qt.QLabel("Totals"), 0, 5)
+    layout.addWidget(qt.QLabel("S"), 1, 1)
+    layout.addWidget(qt.QLabel("S"), 1, 2)
+    layout.addWidget(qt.QLabel("S"), 1, 3)
+    layout.addWidget(qt.QLabel("S"), 1, 4)
+    layout.addWidget(qt.QLabel("S"), 1, 5)
+    layout.addWidget(qt.QLabel("S"), 2, 1)
+    layout.addWidget(qt.QLabel("S"), 2, 2)
+    layout.addWidget(qt.QLabel("S"), 2, 3)
+    layout.addWidget(qt.QLabel("S"), 2, 4)
+    layout.addWidget(qt.QLabel("S"), 2, 5)
+
+    main_window.show()
+    app.exec_()
+
 def test_zone2():
     app = qt.QApplication([])
     app.setStyle('Fusion')
     app.setApplicationName("TimeSheet")
 
     main_window = qt.QWidget()
-    tab_window = p.TimeSlotContainer()
+    layout = qt.QHBoxLayout(main_window)
+    table_widget = t.TotalTable()
 
-    main_window_layout = qt.QVBoxLayout(main_window)
+    layout.addWidget(table_widget)
 
-    main_window_layout.addWidget(tab_window)
+
+
+
+
 
 
     main_window.show()
     app.exec_()
-
 
 def scroll_area_practice():
     app = qt.QApplication([])

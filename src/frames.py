@@ -38,3 +38,10 @@ class TimeTabFrame(QFrame):
         super().__init__()
         self.setObjectName("TimeTabFrame")
         self.setLayout(layout)
+
+
+class TotalsTableFrame(QFrame):
+    def __init__(self, layout):
+        super().__init__()
+        self.setObjectName("TotalsTableFrame")
+        self.setLayout(layout)

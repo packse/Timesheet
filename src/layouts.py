@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QDateEd
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QSettings, QDate
 from src import helper as h
+from src import tables as t
 
 
 # The top heading section of the application
@@ -81,4 +82,8 @@ class TimePeriodLayout(QHBoxLayout):
         self.start_date.dateChanged.connect(set_end_date)
 
 
-
+class TotalsTableLayout(QHBoxLayout):
+    def __init__(self):
+        super().__init__()
+        self.table_widget = t.TotalTable()
+        self.addWidget(self.table_widget)
