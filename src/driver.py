@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication, QScrollArea
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication
 from src import layouts as l
 from src import frames as f
 from src import savebutton as s
@@ -16,6 +16,7 @@ class MainWindow(QWidget):
         # Initialised early because its needed for both adding it to the frame widget and adding save button to it
         details_layout = l.DetailsLayout()
 
+        # Creates the frames and the layouts. The layouts contain other widgets within them.
         heading_frame = f.HeadingFrame(l.HeadingLayout())
         status_frame = f.StatusFrame(l.StatusLayout())
         details_frame = f.DetailsFrame(details_layout)
@@ -23,6 +24,7 @@ class MainWindow(QWidget):
         time_tab_frame = p.TimeSlotContainer(time_period_frame.layout().start_date)
         totals_table_frame = f.TotalsTableFrame(l.TotalsTableLayout())
 
+        # Adds the widgets to the vertical layout container for the main screen.
         vertical_layout_container.addWidget(heading_frame)
         vertical_layout_container.addWidget(status_frame)
         vertical_layout_container.addWidget(details_frame)
@@ -30,7 +32,7 @@ class MainWindow(QWidget):
         vertical_layout_container.addWidget(time_tab_frame)
         vertical_layout_container.addWidget(totals_table_frame)
 
-        # Must be placed at the end once all other layouts have been initialised
+        # Save button placed at the end once all other layouts have been initialised
         details_layout.addWidget(s.SaveButton(vertical_layout_container))
 
         self.show()

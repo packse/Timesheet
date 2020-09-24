@@ -1,4 +1,4 @@
-# Contains the pages that will be within for the stacked layout
+# Contains the widgets that that will be used for the middle section #
 from PyQt5.QtWidgets import QWidget, QFrame, QHBoxLayout, QVBoxLayout, QLabel, QComboBox, QDoubleSpinBox, QCheckBox, \
                                             QTimeEdit, QStackedWidget, QTabWidget, QScrollArea
 from src import helper as h
@@ -8,32 +8,38 @@ from PyQt5.QtCore import QTime
 class TimeSlotContainer(QTabWidget):
     def __init__(self, date_edit):
         super().__init__()
-        # For weeks 1 and 2 for a fortnight
+        num_days = 14
+        # For week 1 of a fortnight
         self.scroll_area1 = QScrollArea()
         self.scroll_window1 = QWidget()
         self.scroll_window_layout1 = QVBoxLayout(self.scroll_window1)
 
+        # For week 2 of a fortnight
         self.scroll_area2 = QScrollArea()
         self.scroll_window2 = QWidget()
         self.scroll_window_layout2 = QVBoxLayout(self.scroll_window2)
 
-        timeslot_row_arr = []
-        num_days = 14
+        # Stores the timeslots for each day within an array
+        self.timeslot_row_arr = []
+        # Sets the start date as the date retrieved as a parameter from the time period section
         date = date_edit.date()
 
+        # Creates timeslot rows for as many days specified in num_days and adds them to the array and tabs
         for i in range(num_days):
             current_row = TimeSlotRow(date.addDays(i))
             if i < num_days/2:
                 self.scroll_window_layout1.addWidget(current_row)
             else:
                 self.scroll_window_layout2.addWidget(current_row)
-            timeslot_row_arr.append(current_row)
+            self.timeslot_row_arr.append(current_row)
 
+        # When the start date is changed then update the start_date_label variable for the timeslot object to the new
+        # date range
         def start_date_changed():
             new_date = date_edit.date()
-            if timeslot_row_arr is not None:
+            if self.timeslot_row_arr is not None:
                 for ii in range(num_days):
-                    timeslot_row_arr[ii].option_display.start_date_label.setText\
+                    self.timeslot_row_arr[ii].option_display.start_date_label.setText\
                         (h.format_qdate(new_date.addDays(ii)))
 
         date_edit.dateChanged.connect(start_date_changed)
@@ -54,10 +60,11 @@ class TimeSlotRow(QFrame):
     def __init__(self, date):
         super().__init__()
         self.layout = QHBoxLayout(self)
-        self.setLineWidth(1)
         # Sets the style of the lines drawn. Check online QFrame for more options
+        self.setLineWidth(1)
         self.setFrameShape(QFrame.Plain | QFrame.Box)
 
+        # Creates the different displays for the stacked widget.
         self.option_display = OptionWidget(date)
         self.attending_display = AttendingPg()
         self.sick_leave_display = SickDayPg()
@@ -65,6 +72,7 @@ class TimeSlotRow(QFrame):
         self.training_display = TrainingOnlyPg()
         self.not_working_display = NotWorkingPg()
 
+        # Adds these displays to the stacked widget
         self.stacked_widget = QStackedWidget()
         self.stacked_widget.addWidget(self.attending_display)
         self.stacked_widget.addWidget(self.sick_leave_display)
@@ -72,13 +80,14 @@ class TimeSlotRow(QFrame):
         self.stacked_widget.addWidget(self.training_display)
         self.stacked_widget.addWidget(self.not_working_display)
 
+        # When the combo box is changed then change to the relevant stacked layout
         self.option_display.combo_box_widget.activated.connect(self.stacked_widget.setCurrentIndex)
 
         self.layout.addWidget(self.option_display)
         self.layout.addWidget(self.stacked_widget)
 
 
-# Widget that contains only the date and the options to select which page to show for the stacked layout
+# Widget that contains the date and the combo box to select which page to show for the stacked layout
 class OptionWidget(QWidget):
     def __init__(self, date):
         super().__init__()
@@ -87,9 +96,11 @@ class OptionWidget(QWidget):
         self.start_date_layout = QVBoxLayout()
         self.option_layout = QVBoxLayout()
 
+        # Creates the start date label that displays the date of that timeslot
         self.start_date_headlabel = QLabel("Start Date:")
-        # Right now this is a placeholder value but it will need to be sent in through the constructor
         self.start_date_label = QLabel(h.format_qdate(date))
+
+        # Create the combo box and the items within it
         self.combo_box_widget = QComboBox()
         self.combo_box_widget.addItem("Attending Work")
         self.combo_box_widget.addItem("Sick Day")
@@ -106,7 +117,7 @@ class OptionWidget(QWidget):
         self.layout.addLayout(self.start_date_layout)
         self.layout.addLayout(self.option_layout)
 
-
+# Option for when the employee is attending work and needs to fill in their work hours
 class AttendingPg(QWidget):
     def __init__(self):
         super().__init__()
@@ -132,7 +143,7 @@ class AttendingPg(QWidget):
         self.holiday_label = QLabel("Public Holiday:")
         self.holiday_checkbox_1 = QCheckBox("Friday 10/3/20")
         self.holiday_checkbox_2 = QCheckBox("Saturday 11/3/20")
-        # Starts disabled but can be enabled if the user works until the next day
+        # Starts disabled but can turn enabled if the user works until the next day
         self.holiday_checkbox_2.setEnabled(False)
 
         self.training_layout = QVBoxLayout()
@@ -145,33 +156,34 @@ class AttendingPg(QWidget):
         self.info_heading_label = QLabel("Hours Calculated:")
         self.info_normal_label = QLabel("Normal Day Hours: " +
                                         str(self.get_time_difference()))
-        # We won't save the status of the  public holidays checkbox so we can set it to 0
+        # We don't save the status of the  public holidays checkbox so we set it to 0 on startup
         self.info_holiday_label = QLabel("Public Holiday Hours: 0.0")
 
-        # When either the start of finish time is changed by the user
+        # When either the start or finish time is changed by the user
         def time_changed():
+            # If the start time is larger than end time then it means work hours extend to the next day
             if self.start_input.time() > self.end_input.time():
                 self.holiday_checkbox_2.setEnabled(True)
+            # If it is smaller than disable and uncheck the next day checkbox
             else:
                 self.holiday_checkbox_2.setEnabled(False)
                 self.holiday_checkbox_2.setChecked(False)
-
+            # Calculate the difference between start and end time
             difference = self.get_time_difference()
+            # Calculate the hours using the difference and display them hrs
             self.calculate_hrs(difference)
-
 
         self.start_input.timeChanged.connect(time_changed)
         self.end_input.timeChanged.connect(time_changed)
         self.break_spinbox.valueChanged.connect(time_changed)
 
+        # If a public holiday checkbox is changed then calculate the hours to display
         def checkbox_changed():
             difference = self.get_time_difference()
             self.calculate_hrs(difference)
 
-
         self.holiday_checkbox_1.stateChanged.connect(checkbox_changed)
         self.holiday_checkbox_2.stateChanged.connect(checkbox_changed)
-
 
         # Adding the Layouts #
 
@@ -207,21 +219,21 @@ class AttendingPg(QWidget):
         self.info_layout.addWidget(self.info_normal_label)
         self.info_layout.addWidget(self.info_holiday_label)
 
-
     # Uses the start and end inputs and then returns the difference in hours between them
     def get_time_difference(self):
         start_time = self.start_input.time()
         end_time = self.end_input.time()
+        # Convert difference in seconds to hours
         difference = start_time.secsTo(end_time) / 60 / 60
-        # If difference is negative
+        # If difference is negative then subtract it from 24 hours to wrap around
         if difference < 0:
             # + because using - would cancel out the operation turning it to addition
             difference = 24 + difference
 
         return difference
 
+    # Calculates the hours for normal and public holidays and displays them in their label
     def calculate_hrs(self, difference):
-
         # Calculations from start time to midnight and midnight to end time
         start_to_mid_hrs = QTime(0, 0).secsTo(self.end_input.time()) / 60 / 60
         mid_to_end_hrs = 24 - (QTime(0, 0).secsTo(self.start_input.time()) / 60 / 60)
@@ -258,7 +270,7 @@ class AttendingPg(QWidget):
             self.info_holiday_label.setText("Public Holiday Hours: " + str(start_to_mid_hrs))
 
 
-
+# When the employee needs to fill in a sick day
 class SickDayPg(QWidget):
     def __init__(self):
         super().__init__()
@@ -278,12 +290,14 @@ class SickDayPg(QWidget):
         self.hrs_layout.addStretch(1)
         self.hrs_layout.addWidget(self.hrs_spinbox)
 
+        # If the employee has a certificate then they can choose to tick the box
         self.layout.addLayout(self.certificate_layout)
         self.certificate_layout.addWidget(self.certificate_label)
         self.certificate_layout.addStretch(1)
         self.certificate_layout.addWidget(self.certificate_checkbox)
 
 
+# For when the employee is away or on annual leave
 class AnnualLeavePg(QWidget):
     def __init__(self):
         super().__init__()
@@ -299,6 +313,7 @@ class AnnualLeavePg(QWidget):
         self.hrs_layout.addStretch(1)
         self.hrs_layout.addWidget(self.hrs_spinbox)
 
+# For when the employee only comes in for work for training
 class TrainingOnlyPg(QWidget):
     def __init__(self):
         super().__init__()
@@ -309,14 +324,13 @@ class TrainingOnlyPg(QWidget):
         self.hrs_spinbox = QDoubleSpinBox()
         self.hrs_spinbox.setSingleStep(.5)
 
-        # Training_hrs_layout is made a child layout of the main layout. Consider putting this layout in its own widget
-        # first if that makes it easier to access the data within it
         self.layout.addLayout(self.hrs_layout)
         self.hrs_layout.addWidget(self.hrs_label)
         self.hrs_layout.addStretch(1)
         self.hrs_layout.addWidget(self.hrs_spinbox)
 
 
+# For when the employee is not scheduled to work on that day
 class NotWorkingPg(QWidget):
     def __init__(self):
         super().__init__()

@@ -29,9 +29,10 @@ class SaveButton(QPushButton):
         # Saves the specified details when the button is clicked
         def save_button_clicked():
             status_frame.show()
-
+            # Get the name and classification text for the input box
             name_text = details_layout.name_input.text()
             class_text = details_layout.classification_input.text()
+            # Create an employee object from that text to set it properly
             temp = e.Employee(name_text, class_text)
 
             error_message = ""
@@ -55,7 +56,7 @@ class SaveButton(QPushButton):
         self.clicked.connect(save_button_clicked)
 
 
-# Helper function to return the frame used the name of the frame we are looking for
+# Helper function to return the frame using the name of the frame we are looking for
 def get_frame(layout_container, name):
     for i in range(layout_container.count()):
         current_frame = layout_container.itemAt(i).widget()

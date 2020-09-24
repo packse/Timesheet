@@ -1,3 +1,5 @@
+# Layouts that display the widgets within them whether it be horizontally, vertically, etc.
+
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QDateEdit
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QSettings, QDate
@@ -9,15 +11,13 @@ from src import tables as t
 class HeadingLayout(QHBoxLayout):
     def __init__(self):
         super().__init__()
-
         self.setObjectName("HeadingLayout")
-
         heading_label = QLabel("Timesheet Program")
         heading_label.setAlignment(Qt.AlignCenter)
         self.addWidget(heading_label)
 
 
-# The status message section that alerts the user to any errors or successes particularly when saving data
+# The status message section that alerts the user to any errors or successes when saving data
 class StatusLayout(QVBoxLayout):
     def __init__(self):
         super().__init__()
@@ -59,13 +59,15 @@ class TimePeriodLayout(QHBoxLayout):
         self.setObjectName("TimePeriodLayout")
         settings = QSettings('Noone', 'TimeSheet')
         self.start_label = QLabel("Start Date")
+        # Converts the start date saved in settings and returns it to a QDate format
         self.start_date = QDateEdit(h.converted_date(settings.value('Start date')))
+        # Allow the user to access the calendar to select a date
         self.start_date.setCalendarPopup(True)
         self.start_date.setMaximumDate(QDate().currentDate())
         self.end_label = QLabel("End Date")
         self.end_date = QDateEdit()
         self.end_date.setDate(self.start_date.date().addDays(14))
-        # (2) removes the arrows from the QDate edit
+        # (2) is used to remove the arrows from the QDate edit
         self.end_date.setButtonSymbols(2)
         self.end_date.setReadOnly(True)
 
@@ -82,8 +84,10 @@ class TimePeriodLayout(QHBoxLayout):
         self.start_date.dateChanged.connect(set_end_date)
 
 
+# Section for the table that calculates total hrs and shifts
 class TotalsTableLayout(QHBoxLayout):
     def __init__(self):
         super().__init__()
         self.table_widget = t.TotalTable()
+
         self.addWidget(self.table_widget)

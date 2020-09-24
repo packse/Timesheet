@@ -7,14 +7,13 @@ Definite In Scope:
 - Translate the data from the program into a format similar to the example printed version for easy sending and printing
 - Sum and Count performed on the number of Mon-Fri shifts, number of weekend shifts and total shifts
 - Additional information located at the bottom of the time sheet example should be included on the printable page
-
---------------------------------
-Needs Consideration In Scope:
 - Count performed on the number of night shifts (Possible additional pay calculation)
 - Count performed on the number of pm shifts
 - Nauseous Linen (hours)
     - Best option for now is to set this as default 0
 - Fortnight start can be selected as something other than Friday's
+
+--------------------------------
 
 Not in Scope:
 - Auto determine if date is within public holiday hours

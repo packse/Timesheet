@@ -1,7 +1,7 @@
-# Contains Helper Function #
+# Helper Functions #
 
-from PyQt5.QtCore import QDate, QTime
-from PyQt5.QtWidgets import QTimeEdit
+from PyQt5.QtCore import QDate
+
 
 # Converts a QDate to a formatted string
 def format_qdate(date):
