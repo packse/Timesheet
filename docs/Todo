@@ -8,7 +8,4 @@ Things that might need to be completed that could be useful
 - Use an alternating colour scheme (White/Grey) to make it easier to see the different timeslots separately
 
 # AttendingPg #
-- NEED TO STOP IT FROM BEING A PLACEHOLDER DATE FOR PUBLIC HOLIDAYS
-- Will need the start and end Timeedits to increase by 15 minutes. Ideally this would be the only way it can increase.
-This will prevent decimal points from showing up when entering a time such as 12:31
 - Remove scrolling for most of the fields so that a user doesn't accidentally scroll and mess up their selection
