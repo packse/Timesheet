@@ -22,7 +22,8 @@ class MainWindow(QWidget):
         details_frame = f.DetailsFrame(details_layout)
         time_period_frame = f.TimePeriodFrame(l.TimePeriodLayout())
         time_tab_frame = p.TimeSlotContainer(time_period_frame.layout().start_date)
-        totals_table_frame = f.TotalsTableFrame(l.TotalsTableLayout())
+        # Need to send through array of timeslots for table to work with when spinboxes are changed
+        totals_table_frame = f.TotalsTableFrame(l.TotalsTableLayout(time_tab_frame.timeslot_row_arr))
 
         # Adds the widgets to the vertical layout container for the main screen.
         vertical_layout_container.addWidget(heading_frame)

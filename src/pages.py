@@ -5,6 +5,7 @@ from src import helper as h
 from src.pwidgets import PDoubleSpinBox, PTimeEdit, PComboBox
 from PyQt5.QtCore import QTime
 
+
 # Contains two weeks worth of timeslots with a tab for the first and second week
 class TimeSlotContainer(QTabWidget):
     def __init__(self, date_edit):
@@ -34,19 +35,18 @@ class TimeSlotContainer(QTabWidget):
                 self.scroll_window_layout2.addWidget(current_row)
             self.timeslot_row_arr.append(current_row)
 
-        # When the start date is changed then update the start_date_label and holiday checkboxes for the timeslot object
+        # When the start date is changed update the start_date_label and holiday checkboxes for the timeslot object
         # to the new date range
         def start_date_changed():
             new_date = date_edit.date()
             if self.timeslot_row_arr is not None:
-                for ii in range(num_days):
-                    self.timeslot_row_arr[ii].option_display.start_date_label.setText(
-                        h.format_qdate(new_date.addDays(ii)))
-                    self.timeslot_row_arr[ii].attending_display.holiday_checkbox_1.setText(
-                        h.format_qdate(new_date.addDays(ii)))
-                    self.timeslot_row_arr[ii].attending_display.holiday_checkbox_2.setText(
-                        h.format_qdate(new_date.addDays(ii+1)))
-
+                for i in range(num_days):
+                    self.timeslot_row_arr[i].option_display.start_date_label.setText(
+                        h.format_qdate(new_date.addDays(i)))
+                    self.timeslot_row_arr[i].attending_display.holiday_checkbox_1.setText(
+                        h.format_qdate(new_date.addDays(i)))
+                    self.timeslot_row_arr[i].attending_display.holiday_checkbox_2.setText(
+                        h.format_qdate(new_date.addDays(i+1)))
         date_edit.dateChanged.connect(start_date_changed)
 
         self.addTab(self.scroll_area1, "Week 1")

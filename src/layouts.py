@@ -53,7 +53,6 @@ class DetailsLayout(QHBoxLayout):
 
 # Section to enter the start date of the fortnight
 class TimePeriodLayout(QHBoxLayout):
-
     def __init__(self):
         super().__init__()
         self.setObjectName("TimePeriodLayout")
@@ -86,8 +85,8 @@ class TimePeriodLayout(QHBoxLayout):
 
 # Section for the table that calculates total hrs and shifts
 class TotalsTableLayout(QHBoxLayout):
-    def __init__(self):
+    def __init__(self, time_slots):
         super().__init__()
-        self.table_widget = t.TotalTable()
+        self.table_widget = t.TotalTable(time_slots)
 
         self.addWidget(self.table_widget)
