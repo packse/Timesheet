@@ -229,8 +229,8 @@ class AttendingPg(QWidget):
     def get_time_difference(self):
         start_time = self.start_input.time()
         end_time = self.end_input.time()
-        # Convert difference in seconds to hours
-        difference = start_time.secsTo(end_time) / 60 / 60
+        # Convert difference in seconds to hours and subtract break time
+        difference = (start_time.secsTo(end_time) / 60 / 60) - self.break_spinbox.value()
         # If difference is negative then subtract it from 24 hours to wrap around
         if difference < 0:
             # + because using - would cancel out the operation turning it to addition
@@ -243,8 +243,6 @@ class AttendingPg(QWidget):
         # Calculations from start time to midnight and midnight to end time
         start_to_mid_hrs = QTime(0, 0).secsTo(self.end_input.time()) / 60 / 60
         mid_to_end_hrs = 24 - (QTime(0, 0).secsTo(self.start_input.time()) / 60 / 60)
-        # Set difference to total hours - break time
-        difference -= self.break_spinbox.value()
 
         # If both holiday checkbox 1 and 2 are checked or only checkbox 1 can be and is checked then display difference
         # in public holiday hrs

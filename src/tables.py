@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView, QHeaderView
+from PyQt5.QtCore import QTime
 from src.pwidgets import BoldTableWidgetItem
+
 
 class TotalTable(QTableWidget):
     def __init__(self, time_slots):
@@ -10,8 +12,41 @@ class TotalTable(QTableWidget):
 
         print(time_slots[0].attending_display.start_input.text())
         def time_changed():
-            print(time_slots[0].attending_display.start_input.text())
-        time_slots[0].attending_display.start_input.timeChanged.connect(time_changed)
+            number_am_shift = 0
+            number_pm_shift = 0
+            number_night_shift = 0
+            hrs_am_shift = 0
+            hrs_pm_shift = 0
+            hrs_night_shift = 0
+
+            for slot in time_slots:
+                if slot.option_display.combo_box_widget.currentText() == "Attending Work":
+                    start_time_converted = QTime(0, 0, 0).secsTo(slot.attending_display.start_input.time())/60/60
+                    if 5 <= start_time_converted <= 10:
+                        number_am_shift += 1
+                        hrs_am_shift += slot.attending_display.get_time_difference()
+                    elif 15 <= start_time_converted <= 17:
+                        number_pm_shift += 1
+                        hrs_pm_shift += slot.attending_display.get_time_difference()
+                    elif 22 <= start_time_converted <= 24 or 0 <= start_time_converted <= 4:
+                        ### NEED TO ADD STUFF HERE TO CHECK IF THE CURRENT DATE OF THE SLOT IS FRIDAY OR SUNDAY
+                        ### THEREFORE REQUIRING SEPARATION OF WEEKDAY AND WEEKEND
+
+                        number_night_shift += 1
+                        hrs_night_shift += slot.attending_display.get_time_difference()
+
+            print(hrs_am_shift)
+
+            #print(time_slots[0].attending_display.start_input.text())
+
+        for slot in time_slots:
+            slot.option_display.combo_box_widget.activated.connect(time_changed)
+            slot.attending_display.start_input.timeChanged.connect(time_changed)
+            slot.attending_display.end_input.timeChanged.connect(time_changed)
+            slot.attending_display.break_spinbox.valueChanged.connect(time_changed)
+
+        #time_slots[0].attending_display.start_input.timeChanged.connect(time_changed)
+
 
 
         ##### TEST ZONE #####
